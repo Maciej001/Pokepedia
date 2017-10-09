@@ -3,8 +3,9 @@
   "description": "\n",
   "version": "0.0.7",
   "dependencies": {
-    "react-dom": "16.0.0",
-    "react": "16.0.0"
+    "react": "16.0.0",
+    "react-apollo": "^1.4.16",
+    "react-dom": "16.0.0"
   },
   "devDependencies": {
     "react-scripts": "1.0.0"

@@ -1,7 +1,35 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-
+import { ApolloClient, createNetworkInterface, ApolloProvider, gql, graphql } from 'react-apollo';
 import Images from './Images';
+import ImagesOut from './ImagesOut';
+import './index.css'
+
+const networkInterface = createNetworkInterface({
+  uri: 'https://api.yelp.com/v3/graphql',
+  opts: {
+    credentials: 'include',
+    mode: 'no-cors',
+  },
+});
+// yc8uSLGDwyEi93vhPBUDgpIfDQX0u3xKO3KMlJksRXfUwY2JFJckF4S7tmakoQiTEfg46cfnE1qujB2lUlm1jF9SGJD9pLkKBJF8ybeSzBX4ll37cyOBUyHasz3bWXYx
+
+
+networkInterface.use([{
+  applyMiddleware(req, next) {
+    if (!req.options.headers) {
+      req.options.headers = {};  // Create the header object if needed.
+    }
+    // get the authentication token from local storage if it exists
+    const token = "yc8uSLGDwyEi93vhPBUDgpIfDQX0u3xKO3KMlJksRXfUwY2JFJckF4S7tmakoQiTEfg46cfnE1qujB2lUlm1jF9SGJD9pLkKBJF8ybeSzBX4ll37cyOBUyHasz3bWXYx"
+    req.options.headers.authorization = token ? `Bearer ${token}` : null;
+    console.log("Gandecki req.options.headers", req.options);
+    next();
+  }
+}]);
+
+const client = new ApolloClient({ networkInterface });
+
 
 const images = [
   {
@@ -37,6 +65,32 @@ const images = [
   },
 ]
 
+
+
+
+// Client ID
+//
+// R4LSI_Dt1s7IseT4EkCNpA
+//
+//
+// Client Secret
+// BCOmQ78erlJvrd1HeOVlyye11LXn16XEmjMt9OQK7E7EXgnKDQ3guOy7PFgI57jm
+// token
+
+
+
+// const ImagesWithData = graphql(gql`{
+//     search(term:"restaurant", location:"London", limit:50, sort_by:"rating"){
+//         business {
+//             id
+//             photos
+//         }
+//
+//     }
+// }`)(Images)
+
+
+
 class App extends Component {
   state = {
     search: ""
@@ -46,11 +100,14 @@ class App extends Component {
 
   render() {
     return (
+      <ApolloProvider client={client}>
       <div className="app">
         <h1>Lunch Tinder</h1>
         <input type="text" value={this.state.search} onChange={this.onChange}/>
-        <Images images={images} />
+        {/* <Images images={images} /> */}
+        <ImagesOut />
       </div>
+      </ApolloProvider>
     );
   }
 }
