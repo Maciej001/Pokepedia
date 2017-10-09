@@ -2,23 +2,13 @@ import React, { Component } from 'react'
 import { gql, graphql } from 'react-apollo'
 import { Link } from 'react-router-dom'
 
+import Image from './Image'
 import _ from 'underscore'
 
-const Image = ({url}) => {
-  const style = {
-    backgroundImage: `url("${url}")`,
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: '50% 50%',
-    overflow: 'hidden',
-    width: '19vw',
-    marginRight: '1vw',
-    height: '19vw',
-    marginBottom: '1vw',
-    cursor: 'pointer',
+const style = {
+  link: {
+    textDecoration: 'none'
   }
-
-  return <div style={style}></div>
 }
 
 const Images = (props) => {
@@ -29,7 +19,9 @@ const Images = (props) => {
   return (
     <div className='images'>
       {randomPokemons.map(pokemon =>
-        <Link to={`/pokemon/${pokemon.id}`}>{pokemon.name}<Image key={pokemon.id} url={pokemon.image} className='image' /></Link>
+        <Link key={pokemon.id} to={`/pokemon/${pokemon.id}`} style={style.link}>
+          <Image name={pokemon.name} url={pokemon.image} className='image' />
+        </Link>
       )}
     </div>
   )
